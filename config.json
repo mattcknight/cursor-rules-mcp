@@ -1,5 +1,5 @@
 {
-    "gitRepo": "https://github.com/your-username/your-rules-repo.git",
+    "gitRepo": "https://github.com/mattcknight/cursor-rules-mcp.git",
     "gitBranch": "main",
     "cacheTTL": 3600000
   }

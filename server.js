@@ -288,13 +288,16 @@ class RulesMCPServer {
         await this.cloneOrUpdateRepo(false);
         const rulesPath = await this.getRulesPath();
         
-        const files = await fs.readdir(rulesPath);
-        const ruleFiles = files.filter(
-          (f) => (f.endsWith(".mdc") || f.endsWith(".md")) && f !== "README.md"
-        );
+        // Recursively find all rule files
+        const ruleFiles = await this.findRuleFiles(rulesPath);
 
         const resources = ruleFiles.map((file) => {
-          const ruleName = file.replace(/\.(mdc|md)$/, "");
+          // Use relative path as rule name, replacing path separators and extensions
+          const ruleName = file.relativePath
+            .replace(/\\/g, "/") // Normalize path separators
+            .replace(/\.(mdc|md)$/, "") // Remove extension
+            .replace(/\//g, "/"); // Keep forward slashes for nested rules
+          
           return {
             uri: `rule://${ruleName}`,
             name: ruleName,
@@ -311,7 +314,7 @@ class RulesMCPServer {
           mimeType: "text/markdown",
         });
 
-        console.error(`Returning ${resources.length} resources`);
+        console.error(`Found ${ruleFiles.length} rule files, returning ${resources.length} resources`);
         return { resources };
       } catch (error) {
         console.error(`Error listing resources: ${error.message}`);
@@ -434,6 +437,38 @@ class RulesMCPServer {
     };
   }
 
+  // Helper function to recursively find all rule files
+  async findRuleFiles(dir, baseDir = null, fileList = []) {
+    if (baseDir === null) {
+      baseDir = dir; // First call, set base directory
+    }
+    
+    const files = await fs.readdir(dir);
+    
+    for (const file of files) {
+      const filePath = path.join(dir, file);
+      const stat = await fs.stat(filePath);
+      
+      if (stat.isDirectory()) {
+        // Recursively search subdirectories
+        await this.findRuleFiles(filePath, baseDir, fileList);
+      } else if (
+        (file.endsWith(".mdc") || file.endsWith(".md")) &&
+        file !== "README.md"
+      ) {
+        // Store relative path from base rules directory
+        const relativePath = path.relative(baseDir, filePath);
+        fileList.push({
+          relativePath: relativePath,
+          fullPath: filePath,
+          name: file,
+        });
+      }
+    }
+    
+    return fileList;
+  }
+
   // Rule retrieval
   async getRulesPath() {
     // Support both .cursor/rules/ and rules/ directory structures
@@ -464,6 +499,9 @@ class RulesMCPServer {
     await this.cloneOrUpdateRepo(refresh);
     const rulesPath = await this.getRulesPath();
 
+    // Normalize rule name (handle both forward slashes and backslashes)
+    const normalizedRuleName = ruleName.replace(/\\/g, "/");
+    
     // Try different file extensions
     const extensions = [".mdc", ".md", ".txt"];
     let ruleContent = null;
@@ -471,8 +509,8 @@ class RulesMCPServer {
 
     for (const ext of extensions) {
       const possibleFiles = [
-        path.join(rulesPath, `${ruleName}${ext}`),
-        path.join(rulesPath, ruleName, `README${ext}`),
+        path.join(rulesPath, `${normalizedRuleName}${ext}`),
+        path.join(rulesPath, normalizedRuleName, `README${ext}`),
       ];
 
       for (const filePath of possibleFiles) {
@@ -492,10 +530,10 @@ class RulesMCPServer {
     if (!ruleContent) {
       // List available files to help user
       try {
-        const files = await fs.readdir(rulesPath);
-        const availableRules = files
-          .filter((f) => f.endsWith(".mdc") || f.endsWith(".md"))
-          .map((f) => f.replace(/\.(mdc|md)$/, ""));
+        const ruleFiles = await this.findRuleFiles(rulesPath);
+        const availableRules = ruleFiles.map((file) => 
+          file.relativePath.replace(/\.(mdc|md)$/, "").replace(/\\/g, "/")
+        );
 
         return {
           content: [
@@ -534,22 +572,20 @@ class RulesMCPServer {
     const rulesPath = await this.getRulesPath();
 
     try {
-      const files = await fs.readdir(rulesPath);
-      const rules = files
-        .filter((f) => f.endsWith(".mdc") || f.endsWith(".md"))
-        .filter((f) => f !== "README.md")
-        .map((f) => ({
-          name: f.replace(/\.(mdc|md)$/, ""),
-          file: f,
-        }));
+      const ruleFiles = await this.findRuleFiles(rulesPath);
+      const rules = ruleFiles.map((file) => ({
+        name: file.relativePath.replace(/\.(mdc|md)$/, "").replace(/\\/g, "/"),
+        file: file.name,
+        path: file.relativePath.replace(/\\/g, "/"),
+      }));
 
-      const rulesList = rules.map((r) => `- ${r.name} (${r.file})`).join("\n");
+      const rulesList = rules.map((r) => `- ${r.name} (${r.path})`).join("\n");
 
       return {
         content: [
           {
             type: "text",
-            text: `Available rules (${rules.length}):\n\n${rulesList}\n\nUse get_rule with the rule name (without extension) to retrieve a specific rule.`,
+            text: `Available rules (${rules.length}):\n\n${rulesList}\n\nUse get_rule with the rule path (without extension) to retrieve a specific rule.`,
           },
         ],
       };
@@ -571,22 +607,16 @@ class RulesMCPServer {
     const rulesPath = await this.getRulesPath();
 
     try {
-      const files = await fs.readdir(rulesPath);
-      const ruleFiles = files.filter(
-        (f) => (f.endsWith(".mdc") || f.endsWith(".md")) && f !== "README.md"
-      );
-
+      const ruleFiles = await this.findRuleFiles(rulesPath);
       const allRules = [];
 
       for (const file of ruleFiles) {
         try {
-          const content = await fs.readFile(
-            path.join(rulesPath, file),
-            "utf-8"
-          );
-          allRules.push(`\n\n# ${file}\n\n${content}\n\n---`);
+          const content = await fs.readFile(file.fullPath, "utf-8");
+          const relativePath = file.relativePath.replace(/\\/g, "/");
+          allRules.push(`\n\n# ${relativePath}\n\n${content}\n\n---`);
         } catch (error) {
-          console.error(`Error reading ${file}: ${error.message}`);
+          console.error(`Error reading ${file.fullPath}: ${error.message}`);
         }
       }
 
