@@ -11,12 +11,12 @@
 
 ## Overview
 
-This directory contains reusable `.cursor/rules` templates that can be copied to production projects to enable AI-assisted development with specialized personas.
+This directory contains reusable `.cursor/rules` templates that are accessed via MCP (Model Context Protocol) server from this Git repository. Rules are automatically fetched and made available to Cursor AI through the MCP server.
 
-**⚠️ Important:** This README documents the template repository itself. When you copy these rules to your production project:
-- **REQUIRED:** Update `core/project-overview.mdc` with YOUR project details
-- **OPTIONAL:** Remove `meta-project-purpose.mdc` if not maintaining templates
-- **OPTIONAL:** Remove template-generation files if not creating templates
+**⚠️ Important:** This README documents the centralized rules repository. Rules are accessed via MCP server - no local copying required:
+- **Rules are fetched from Git** - Automatically available via MCP server
+- **Centralized management** - All rules maintained in this repository
+- **Automatic updates** - Rule changes propagate to all projects using the MCP server
 
 ## Directory Structure
 
@@ -124,58 +124,62 @@ Files are loaded in priority order:
 
 ## Quick Start
 
-### For Template Users (Copying to Production Project)
+### For Users (Accessing Rules via MCP)
 
-1. **Copy `.cursor/rules/` to your production project**
-   ```bash
-   cp -r .cursor/rules/ /path/to/your/production/project/.cursor/
-   ```
+1. **Configure MCP Server in Cursor**
+   - Open Cursor Settings → Features → MCP
+   - Add the cursor-rules-mcp server
+   - Point to this Git repository: `https://github.com/mattcknight/cursor-rules-mcp.git`
+   - Rules are automatically fetched and cached
 
 2. **Read `00-critical/meta-project-purpose.mdc` FIRST**
-   - Understand this is a template repository
-   - Follow instructions for copying to your project
+   - Understand rules are accessed via MCP server
+   - No local file copying required
 
-3. **REQUIRED: Update `core/project-overview.mdc`**
-   - Fill in YOUR project details
-   - Replace all `[Your Project Name]` placeholders
-   - Customize for your technology stack
+3. **Access Rules via MCP**
+   - Use MCP tools to list available rules
+   - Access specific rules by name/path
+   - Rules are automatically refreshed from Git
 
-4. **Select relevant personas**
-   - Enable/disable personas in `rules.mdc` based on your needs
+4. **Use Available Personas**
+   - All 19 personas are available via MCP
+   - Access through MCP server interface
+   - No configuration needed
 
-### For Template Maintainers (This Repository)
+### For Repository Maintainers (This Repository)
 
 1. **Read `00-critical/meta-project-purpose.mdc` FIRST**
-   - Understand this is a template repository, not a typical development project
-   - Focus on template generation and knowledge synthesis
-   - Think reusability and generalization
+   - Understand this is a centralized rules repository
+   - Rules are served via MCP server to multiple projects
+   - Focus on rule quality and maintainability
 
 2. **Review Core Principles**
-   - `core/project-overview.mdc` - Template placeholder structure
-   - `core/template-principles.mdc` - Template design standards
+   - `core/template-principles.mdc` - Rule design standards
+   - Keep rules generic and reusable across projects
 
 3. **Follow AI Guidelines**
    - `ai-guidelines/knowledge-synthesis.mdc` - How to synthesize learnings
-   - `ai-guidelines/template-generation.mdc` - How to create templates
+   - `ai-guidelines/template-generation.mdc` - How to create reusable rules
 
-4. **Use Appropriate Personas**
-   - Load personas relevant to current task
-   - Adapt persona behavior for template creation context
+4. **Maintain Rule Quality**
+   - Update rules in this repository
+   - Changes automatically propagate via MCP server
+   - Test rule changes before committing
 
-### For Developers Using the Template
+### For Developers Using Rules via MCP
 
-1. **Understand the Template Structure**
-   - All rules are designed for production code development
-   - Customize `project-overview.mdc` for your project
-   - Remove template-specific files if not maintaining templates
+1. **Understand MCP Access**
+   - Rules are fetched from Git repository via MCP server
+   - No local files needed in your project
+   - Rules are automatically cached and refreshed
 
-2. **Review Structure Standards**
-   - Understand modular `.mdc` architecture
-   - Learn `@import` pattern usage
-   - See main `README.md` for complete usage guide
+2. **Access Rules**
+   - Use MCP tools to list and access rules
+   - Rules are organized by category (critical, development, personas, etc.)
+   - All rules available through MCP server interface
 
-3. **Follow Git Workflow**
-   - See `development/git-workflow.mdc`
+3. **Follow Standards**
+   - See `development/git-workflow.mdc` via MCP
    - Use standardized commit messages with Jira ticket prefix
    - Follow branch naming conventions
 
@@ -227,91 +231,47 @@ version: 1.0.0
 3. **Update changelog** in file or `rules.mdc`
 4. **Test** to ensure no breaking changes
 
-## Customization for Production Projects
+## Using Rules via MCP Server
 
-**When copying this template to your production project:**
+**Rules are accessed via MCP server - no local copying required:**
 
-### Step 1: Copy Rules to Your Project
+### Step 1: Configure MCP Server
 
-```bash
-# Copy .cursor/rules/ directory to your production project
-cp -r .cursor/rules/ /path/to/your/production/project/.cursor/
-```
+1. **Install the MCP Server**
+   ```bash
+   git clone https://github.com/mattcknight/cursor-rules-mcp.git
+   cd cursor-rules-mcp
+   npm install
+   chmod +x server.js
+   ```
 
-### Step 2: Update Project Context (REQUIRED)
+2. **Configure in Cursor**
+   - Open Cursor Settings → Features → MCP
+   - Add new MCP server:
+     - Name: `cursor-rules-server`
+     - Type: `stdio`
+     - Command: `node /path/to/cursor-rules-mcp/server.js`
+   - Update `config.json` with this repository URL
 
-```bash
-# Edit project-overview.mdc and fill in YOUR project details
-# Replace [Your Project Name], [Your Project Type], etc.
-```
+### Step 2: Access Rules
 
-### Step 3: Remove Template-Specific Files (OPTIONAL)
+Rules are automatically available via MCP:
+- Use MCP tools to list available rules
+- Access rules by name/path through MCP interface
+- Rules are cached and automatically refreshed
 
-```bash
-# Optional: Remove template-specific files if not maintaining templates
-# These are only needed for template creators
-rm .cursor/rules/00-critical/meta-project-purpose.mdc  # Can remove after reading
-rm .cursor/rules/ai-guidelines/knowledge-synthesis.mdc  # Only for template creators
-rm .cursor/rules/ai-guidelines/template-generation.mdc  # Only for template creators
-```
+### Step 3: Use Personas
 
-### Step 4: Add Project-Specific Files
+All personas are available via MCP:
+- Access through MCP server interface
+- No local configuration needed
+- All 19 personas available immediately
 
-```bash
-# Add your project-specific rules
-# Example: Business rules
-cat > .cursor/rules/core/business-rules.mdc << 'EOF'
----
-description: Business domain rules and constraints
-globs: "**/*"
-tags: [core, business, domain]
-priority: 2
-version: 1.0.0
----
+### Step 4: Rule Updates
 
-# Business Rules
-
-[Your business rules here]
-EOF
-```
-
-### Step 5: Update Main Entry Point
-
-Edit `.cursor/rules.mdc`:
-
-```markdown
----
-description: Main Cursor rules configuration for [Your Project]
-globs: "**/*"
-tags: [main, configuration]
-priority: 1
-version: 2.0.0
-project_type: [your-project-type]
----
-
-# [Your Project] - Cursor Rules Configuration
-
-## CRITICAL RULES
-# Remove meta-project import
-# @import ./rules/00-critical/meta-project-purpose.mdc
-
-## Core Project Rules
-@import ./rules/core/project-overview.mdc
-@import ./rules/core/business-rules.mdc  # Add your rules
-
-# ... rest of imports
-```
-
-### Step 4: Customize Personas
-
-Enable only personas relevant to your team:
-
-```markdown
-## Personas
-@import ./rules/personas/persona-developer.mdc
-@import ./rules/personas/persona-qa-engineer.mdc
-# @import ./rules/personas/persona-devops-engineer.mdc  # Not needed for this project
-```
+- Rules are automatically fetched from Git repository
+- Changes propagate to all projects using the MCP server
+- Cache is refreshed based on TTL configuration
 
 ## File Naming Conventions
 

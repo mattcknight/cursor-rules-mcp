@@ -1,37 +1,37 @@
 ---
-description: CRITICAL - This is a template repository. Developers copy rules to their production projects.
+description: CRITICAL - Rules are accessed via MCP server from Git repository
 globs: "**/*"
-tags: [critical, template, onboarding]
+tags: [critical, mcp, onboarding]
 priority: 1
-version: 1.0.0
+version: 2.0.0
 ---
 
-# CRITICAL: Template Purpose & Usage Instructions
+# CRITICAL: Rules Access via MCP Server
 
 ## ⚠️ READ THIS FIRST ⚠️
 
-**This is a TEMPLATE repository. You should copy the rules to your production project.**
+**Rules are accessed via MCP (Model Context Protocol) server from this Git repository. You do NOT need to copy rules to your project.**
 
-### What This Template Is
+### What This Repository Is
 
-This repository contains **reusable `.cursor/rules` templates** that you can copy to your production development projects to enable AI-assisted development with specialized personas.
+This repository contains **reusable `.cursor/rules` templates** that are accessed via an MCP server. Rules are automatically fetched from this Git repository and made available to Cursor AI through the MCP server.
 
-### How to Use This Template
+### How to Use Rules via MCP
 
-1. **Copy Rules to Your Project**
-   ```bash
-   # Copy .cursor/rules/ directory to your project
-   cp -r .cursor/rules/ /path/to/your/project/.cursor/
-   ```
+1. **Configure MCP Server in Cursor**
+   - Open Cursor Settings → Features → MCP
+   - Add the cursor-rules-mcp server pointing to this repository
+   - The server automatically fetches rules from Git
 
-2. **Customize Project Context**
-   - Update `.cursor/rules/core/project-overview.mdc` with YOUR project details
-   - Replace `[Your Project Name]` placeholders
-   - Remove or update this file (`meta-project-purpose.mdc`) if needed
+2. **Access Rules via MCP**
+   - Rules are automatically available when the MCP server is configured
+   - Use `@mcp` or MCP tools to access specific rules
+   - Rules are cached and refreshed automatically
 
 3. **Select Relevant Personas**
-   - Choose from 19 available personas based on your needs
-   - Disable unused personas by commenting out `@import` statements in `rules.mdc`
+   - All 19 personas are available via MCP
+   - Access them through the MCP server interface
+   - No local file copying required
 
 4. **Start Using Personas**
    ```markdown
@@ -61,42 +61,42 @@ This repository contains **reusable `.cursor/rules` templates** that you can cop
 
 ### Important Notes
 
-- ✅ **This template is FOR production code** - All rules are designed for real development projects
-- ✅ **Customize for your project** - Update project-specific values (names, keys, etc.)
-- ✅ **Remove template-specific files** - Delete meta-project documentation if not needed
+- ✅ **Rules accessed via MCP** - No local copying required, rules are fetched from Git
+- ✅ **Automatic updates** - Rules are refreshed from Git repository automatically
+- ✅ **Centralized management** - All rules maintained in this Git repository
 - ✅ **Focus on your code** - Use personas to help write, review, and maintain your production code
 
-### Files You Should Customize
+### MCP Server Benefits
 
-- **REQUIRED:** `.cursor/rules/core/project-overview.mdc` - Fill in your project details
-- **OPTIONAL:** Remove meta-project files if not maintaining templates:
-  - `ai-guidelines/knowledge-synthesis.mdc` (for template creators)
-  - `ai-guidelines/template-generation.mdc` (for template creators)
-  - `.cursor/rules/README.md` (template repository documentation)
+- ✅ **No local files** - Rules don't need to be copied to each project
+- ✅ **Always up-to-date** - Rules are fetched from Git, ensuring latest versions
+- ✅ **Centralized updates** - Rule changes propagate to all projects automatically
+- ✅ **Easy maintenance** - Update rules once in Git, all projects benefit
 
-### Files You Should Keep
+### Available via MCP
 
-- ✅ All persona files (`personas/*.mdc`) - Use these for AI assistance
-- ✅ Development standards (`development/*.mdc`) - Production code standards
-- ✅ Documentation standards (`documentation/*.mdc`) - Documentation guidelines
-- ✅ AI guidelines (`ai-guidelines/*.mdc`) - Except template-generation files if not maintaining templates
+- ✅ All persona files (`personas/*.mdc`) - Access via MCP server
+- ✅ Development standards (`development/*.mdc`) - Available through MCP
+- ✅ Documentation standards (`documentation/*.mdc`) - Fetched from Git
+- ✅ AI guidelines (`ai-guidelines/*.mdc`) - Accessible via MCP resources
 
 ---
 
-## For Template Maintainers Only
+## For Repository Maintainers
 
-**If you are maintaining this template repository** (not using it for production code):
+**If you are maintaining this rules repository:**
 
-This repository is a **meta-project** that:
+This repository is a **centralized rules repository** that:
 - Aggregates learnings from multiple AI-assisted development projects
-- Creates reusable `.cursor/rules` templates for other developers
+- Provides reusable `.cursor/rules` templates via MCP server
 - Documents best practices and patterns
+- Serves rules to multiple projects through MCP
 
-See `.cursor/rules/README.md` for template maintenance guidelines.
+See `.cursor/rules/README.md` for maintenance guidelines.
 
 ---
 
-**Last Updated:** 2025-01-22  
-**Version:** 1.0.0  
-**Template Type:** Multi-Persona AI Development Rules  
-**Primary Purpose:** Enable AI-assisted production code development
+**Last Updated:** 2025-11-21  
+**Version:** 2.0.0  
+**Access Method:** MCP Server (Model Context Protocol)  
+**Primary Purpose:** Enable AI-assisted production code development via centralized rules repository
