@@ -287,9 +287,22 @@ class RulesMCPServer {
         console.error("ListResourcesRequestSchema handler called");
         await this.cloneOrUpdateRepo(false);
         const rulesPath = await this.getRulesPath();
+        console.error(`Rules path: ${rulesPath}`);
         
         // Recursively find all rule files
         const ruleFiles = await this.findRuleFiles(rulesPath);
+        console.error(`findRuleFiles returned ${ruleFiles.length} files`);
+
+        if (ruleFiles.length === 0) {
+          console.error(`WARNING: No rule files found in ${rulesPath}`);
+          // Try to list what's actually there
+          try {
+            const topLevel = await fs.readdir(rulesPath);
+            console.error(`Top-level contents: ${topLevel.join(", ")}`);
+          } catch (e) {
+            console.error(`Error reading directory: ${e.message}`);
+          }
+        }
 
         const resources = ruleFiles.map((file) => {
           // Use relative path as rule name, replacing path separators and extensions
@@ -382,7 +395,19 @@ class RulesMCPServer {
 
       if (cacheAge < cacheTTL) {
         console.error(`Using cached rules (age: ${Math.round(cacheAge / 1000)}s)`);
-        return;
+        // Verify the rules directory exists
+        const rulesPath = path.join(this.rulesRepoPath, ".cursor", "rules");
+        try {
+          await fs.access(rulesPath);
+          console.error(`Verified rules directory exists: ${rulesPath}`);
+        } catch (e) {
+          console.error(`WARNING: Rules directory not found at ${rulesPath}, forcing refresh`);
+          // Force refresh if rules directory doesn't exist
+          refresh = true;
+        }
+        if (!refresh) {
+          return;
+        }
       }
     }
 
@@ -416,7 +441,18 @@ class RulesMCPServer {
 
       this.lastFetchTime = Date.now();
       console.error("Rules repository updated successfully");
+      
+      // Verify rules directory exists after clone/update
+      const rulesPath = path.join(this.rulesRepoPath, ".cursor", "rules");
+      try {
+        const stat = await fs.stat(rulesPath);
+        console.error(`Verified rules directory exists: ${rulesPath} (isDirectory: ${stat.isDirectory()})`);
+      } catch (e) {
+        console.error(`ERROR: Rules directory not found at ${rulesPath} after clone/update`);
+        throw new Error(`Rules directory not found at ${rulesPath} after cloning repository`);
+      }
     } catch (error) {
+      console.error(`ERROR in cloneOrUpdateRepo: ${error.message}`);
       throw new Error(
         `Failed to fetch rules from Git: ${error.message}\n\nMake sure:\n1. Git is installed\n2. The repository URL is correct\n3. You have access to the repository`
       );
@@ -441,29 +477,41 @@ class RulesMCPServer {
   async findRuleFiles(dir, baseDir = null, fileList = []) {
     if (baseDir === null) {
       baseDir = dir; // First call, set base directory
+      console.error(`findRuleFiles: Starting search in ${dir}`);
     }
     
-    const files = await fs.readdir(dir);
-    
-    for (const file of files) {
-      const filePath = path.join(dir, file);
-      const stat = await fs.stat(filePath);
+    try {
+      const files = await fs.readdir(dir);
+      console.error(`findRuleFiles: Found ${files.length} items in ${dir}`);
       
-      if (stat.isDirectory()) {
-        // Recursively search subdirectories
-        await this.findRuleFiles(filePath, baseDir, fileList);
-      } else if (
-        (file.endsWith(".mdc") || file.endsWith(".md")) &&
-        file !== "README.md"
-      ) {
-        // Store relative path from base rules directory
-        const relativePath = path.relative(baseDir, filePath);
-        fileList.push({
-          relativePath: relativePath,
-          fullPath: filePath,
-          name: file,
-        });
+      for (const file of files) {
+        const filePath = path.join(dir, file);
+        
+        try {
+          const stat = await fs.stat(filePath);
+          
+          if (stat.isDirectory()) {
+            // Recursively search subdirectories
+            await this.findRuleFiles(filePath, baseDir, fileList);
+          } else if (
+            (file.endsWith(".mdc") || file.endsWith(".md")) &&
+            file !== "README.md"
+          ) {
+            // Store relative path from base rules directory
+            const relativePath = path.relative(baseDir, filePath);
+            fileList.push({
+              relativePath: relativePath,
+              fullPath: filePath,
+              name: file,
+            });
+            console.error(`findRuleFiles: Found rule file: ${relativePath}`);
+          }
+        } catch (statError) {
+          console.error(`findRuleFiles: Error statting ${filePath}: ${statError.message}`);
+        }
       }
+    } catch (readError) {
+      console.error(`findRuleFiles: Error reading directory ${dir}: ${readError.message}`);
     }
     
     return fileList;
