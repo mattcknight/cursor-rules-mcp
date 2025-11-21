@@ -1,0 +1,5 @@
+{
+    "gitRepo": "https://github.com/your-username/your-rules-repo.git",
+    "gitBranch": "main",
+    "cacheTTL": 3600000
+  }

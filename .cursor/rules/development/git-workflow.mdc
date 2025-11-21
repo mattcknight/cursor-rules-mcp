@@ -1,0 +1,527 @@
+---
+description: Git workflow standards including commit messages, branch management, and VIM avoidance for Cursor
+globs: "**/*"
+tags: [development, git, workflow, commit, branch, vim-avoidance]
+priority: 3
+version: 2.0.0
+source: Consolidated from Zero Payment project + DocOriginSmokeTestScripts
+---
+
+# Git Workflow Standards
+
+## 🔴 CRITICAL: VIM Avoidance for Cursor AI
+
+**Cursor AI CANNOT interact with VIM. Commands that open VIM will break automation.**
+
+### ❌ NEVER USE (Opens VIM):
+```powershell
+git rebase -i <commit>       # ❌ Opens interactive VIM
+git rebase --interactive     # ❌ Opens VIM
+git commit                   # ❌ Opens VIM (without -m flag)
+git merge                    # ❌ May open VIM for conflicts
+```
+
+### ✅ ALWAYS USE:
+```powershell
+git commit -m "message"                    # ✅ Non-interactive
+git commit --amend -m "new message"        # ✅ Non-interactive
+git commit --amend --no-edit               # ✅ No editor
+git merge --no-edit                        # ✅ No editor
+```
+
+### Safe Rebase Alternatives
+
+**Method 1: Export → Reset → Apply (Best for Multiple Commits)**
+```powershell
+# Export commits as patches
+git format-patch -N HEAD -o "backup_folder/"
+
+# Reset to clean state
+git reset --hard <base_commit>
+
+# Apply each patch and amend
+git am "backup_folder/0001-*.patch"
+git commit --amend -m "NEW-MESSAGE"
+```
+
+**Method 2: Soft Reset & Recommit**
+```powershell
+# Soft reset (keeps changes)
+git reset --soft HEAD~3
+
+# Recommit with correct messages
+git add <files>
+git commit -m "TICKET-123: First commit"
+git commit -m "TICKET-123: Second commit"
+```
+
+### If Stuck in VIM
+1. Report to user: "Terminal stuck in VIM"
+2. User must press: `ESC` → `:q!` → `ENTER`
+3. Run: `git rebase --abort`
+4. Use alternative method above
+
+---
+
+## 🔴 MANDATORY: Zero-Tolerance Rules
+
+**These rules are NON-NEGOTIABLE. Violations waste time and money.**
+
+### TODO List Rules
+- ❌ **NEVER mark TODO items as "cancelled" or "skipped"** without explicit user approval
+- ❌ **NEVER skip major steps** like unit tests
+- ✅ **ALWAYS complete ALL items** before declaring task done
+
+### Testing Rules
+- ❌ **NEVER skip unit tests** - They are MANDATORY, not optional
+- ✅ **ALWAYS create comprehensive unit tests** (50+ test cases for major features)
+- ✅ **Cover ALL code paths:** Happy path, error cases, edge cases, feature flags
+
+### Commit Message Rules
+- ❌ **NEVER use generic messages** like "updates" or "changes"
+- ❌ **NEVER use conventional commit format** like `feat(auth):` or `fix(api):`
+- ❌ **NEVER use type prefixes** like `feature:`, `bugfix:`, `docs:`
+- ❌ **NEVER commit code with failing tests**
+- ✅ **ALWAYS prefix with Jira ticket**: `PROJ-1234 Brief description`
+- ✅ **ALWAYS use descriptive, clear language**
+- ✅ **ALWAYS reference issue/ticket** (Jira ticket number required)
+
+---
+
+## Commit Message Format
+
+### 🔴 MANDATORY Format: Jira Ticket Prefix
+
+**ALL commit messages MUST start with Jira ticket number followed by description.**
+
+```bash
+# Primary format (REQUIRED)
+[PROJECT_KEY]-[NUMBER] Brief description
+
+# With detailed context
+PROJ-1234 Add user authentication with JWT tokens
+- Implemented JWT token generation and validation
+- Added user login and registration endpoints
+- Created middleware for token verification
+- Updated API documentation with auth examples
+```
+
+### ❌ FORBIDDEN Formats
+
+**NEVER use these formats:**
+- ❌ Conventional commits: `feat(auth): add JWT token validation`
+- ❌ Type prefixes: `feature: add authentication`
+- ❌ Component prefixes: `[API] Add authentication`
+- ❌ Format with type: `PROJ-1234 -feature [API] Add authentication`
+- ❌ Generic messages: `update code`, `fix bug`, `changes`
+
+### ✅ CORRECT Format
+
+**Always use:**
+```bash
+# Simple format
+PROJ-1234 Add user authentication
+
+# With details
+PROJ-1234 Add user authentication with JWT tokens
+- Implemented JWT token generation and validation
+- Added user login and registration endpoints
+- Created middleware for token verification
+```
+
+### When Jira Ticket Not Available
+
+**For commits without Jira tickets (rare cases):**
+```bash
+# Use descriptive commit message without ticket prefix
+# Only acceptable for: hotfixes, emergency fixes, documentation-only changes
+
+# Example (emergency hotfix without ticket):
+Hotfix: Resolve critical payment processing issue
+- Fixed race condition in payment handler
+- Added additional error logging
+- Verified fix in staging environment
+```
+
+**Note:** Prefer creating a Jira ticket first, then use ticket number in commit message.
+
+### 🤖 AI Commit Attribution (MANDATORY)
+
+**ALL commits produced by AI MUST include AI attribution.**
+
+**Attribution Format Options:**
+
+**Option 1: Footer Attribution (Recommended)**
+```bash
+TICKET-123: Add user authentication with JWT tokens
+
+- Implemented token generation and validation
+- Added login and registration endpoints
+- Created middleware for token verification
+
+---
+Produced By AI: Composer and Cursor IDE
+```
+
+**Option 2: Inline Attribution**
+```bash
+TICKET-123: Add user authentication (Produced By AI: Composer and Cursor IDE)
+
+- Implemented token generation and validation
+- Added login and registration endpoints
+```
+
+**Format:** `Produced By AI: [Current Model Name] and [Current IDE Name]`
+
+**CRITICAL - Automatic Detection Required:**
+- ✅ **AUTOMATICALLY detect** the current AI model name from system context at commit time
+- ✅ **AUTOMATICALLY detect** the current IDE name from workspace/environment at commit time
+- ✅ **USE the detected values** directly in the commit message - do NOT use placeholders
+- ❌ **NEVER hardcode** model or IDE names in examples
+- ❌ **NEVER use placeholders** like "[MODEL]" or "[IDE]" in actual commits
+
+**When to Apply:**
+- ✅ ALWAYS when AI produces code changes
+- ✅ ALWAYS when AI writes commit messages
+- ✅ ALWAYS when AI modifies files through automated tools
+- ❌ NOT REQUIRED when user manually edits code and commits manually
+
+**Rationale:**
+- Transparency: Makes clear which changes were AI-generated
+- Accountability: Identifies specific AI model and IDE used for collaboration
+- Audit Trail: Tracks AI contribution patterns over time
+- Compliance: May be required for certain development standards
+
+**CRITICAL - Automatic Detection:**
+The AI MUST automatically detect the current model name and IDE name from system context and use them directly in commit messages. Do NOT use placeholders - use the actual detected values.
+
+**Detection:**
+- **Model Name**: Automatically determine from system context (e.g., "Composer", "Claude Sonnet 4.5", "GPT-4")
+- **IDE Name**: Automatically determine from workspace/environment (e.g., "Cursor IDE", "VS Code", "IntelliJ IDEA")
+
+**Usage:**
+- ✅ Automatically detect and use: `Produced By AI: Composer and Cursor IDE` (if those are the detected values)
+- ✅ Use actual detected values - no placeholders in commits
+- ❌ Never use placeholders in actual commits: `Produced By AI: [MODEL] and [IDE]`
+
+---
+
+### Examples
+
+#### Feature Addition
+```bash
+PROJ-1234 Add user authentication with JWT tokens
+
+- Implemented JWT token generation and validation
+- Added user login and registration endpoints
+- Created middleware for token verification
+- Updated API documentation with auth examples
+
+Related: PROJ-4567, PROJ-7890
+Closes: PROJ-1234
+```
+
+#### Bug Fix
+```bash
+PROJ-4567 Resolve memory leak in data table component
+
+- Fixed event listener cleanup in component unmount
+- Optimized data rendering for large datasets
+- Added proper error handling for API failures
+- Improved component performance metrics
+
+Fixes: PROJ-7890
+```
+
+#### Documentation Update
+```bash
+PROJ-7890 Add comprehensive API integration guide
+
+- Created step-by-step integration tutorials
+- Added code examples for common use cases
+- Documented error handling and troubleshooting
+- Established best practices for API usage
+
+Related: PROJ-1011
+```
+
+## Branch Naming Convention
+
+### Standard Format
+
+```bash
+# Format: [type]/[PROJECT_KEY]-[NUMBER]-[quick-summary]-[user-initials]
+feature/PROJ-1234-user-auth-mbolyshkanov
+feature/PROJ-4567-api-validation-jsmith
+bugfix/PROJ-7890-memory-leak-adoe
+docs/PROJ-1011-api-guide-mwilson
+
+# Version handling for existing branches
+feature/PROJ-1234-user-auth-mbolyshkanov-v2
+feature/PROJ-1234-user-auth-mbolyshkanov-v3
+bugfix/PROJ-7890-memory-leak-adoe-v2
+
+# Alternative formats (if no issue tracking):
+feature/user-authentication-mbolyshkanov
+bugfix/memory-leak-fix-jdoe
+docs/api-guide-update-msmith
+```
+
+### Branch Types
+
+- **feature/**: New features or functionality
+- **bugfix/**: Bug fixes
+- **hotfix/**: Critical production fixes
+- **docs/**: Documentation updates
+- **test/**: Test additions or modifications
+- **refactor/**: Code refactoring
+- **chore/**: Maintenance tasks
+
+## Git Hooks
+
+### Commit Message Validation
+
+**File:** `.git/hooks/commit-msg`
+
+```bash
+#!/bin/sh
+# Validate commit message format - Jira ticket prefix required
+commit_regex="^[A-Z]+-[0-9]+ .+"
+if ! grep -qE "$commit_regex" "$1"; then
+    echo "❌ Invalid commit message format!"
+    echo "✅ Format: PROJ-1234 Brief description"
+    echo "✅ Example: PROJ-1234 Add user authentication with JWT tokens"
+    echo "❌ NOT ALLOWED: feat(auth): add JWT, feature: add auth, [API] Add auth"
+    exit 1
+fi
+echo "✅ Commit message format is valid"
+```
+
+### Setup Script
+
+**File:** `scripts/setup-commit-hooks.sh`
+
+```bash
+#!/bin/bash
+# setup-commit-hooks.sh
+
+# Create commit-msg hook
+cat > .git/hooks/commit-msg << 'EOF'
+#!/bin/sh
+# Validate commit message format - Jira ticket prefix required
+commit_regex="^[A-Z]+-[0-9]+ .+"
+if ! grep -qE "$commit_regex" "$1"; then
+    echo "❌ Invalid commit message format!"
+    echo "✅ Format: PROJ-1234 Brief description"
+    echo "✅ Example: PROJ-1234 Add user authentication with JWT tokens"
+    echo "❌ NOT ALLOWED: feat(auth): add JWT, feature: add auth, [API] Add auth"
+    exit 1
+fi
+echo "✅ Commit message format is valid"
+EOF
+
+chmod +x .git/hooks/commit-msg
+echo "✅ Commit message hook installed"
+```
+
+## Branch Version Management
+
+### Branch Version Management Script
+
+**File:** `scripts/create-branch-with-version.sh`
+
+```bash
+#!/bin/bash
+# create-branch-with-version.sh
+
+BRANCH_NAME="$1"
+BASE_BRANCH="${2:-main}"
+
+if [ -z "$BRANCH_NAME" ]; then
+    echo "Usage: $0 <branch-name> [base-branch]"
+    echo "Example: $0 feature/PROJ-1234-user-auth-mbolyshkanov develop"
+    exit 1
+fi
+
+# Function to check if branch exists
+branch_exists() {
+    git show-ref --verify --quiet refs/heads/"$1"
+}
+
+# Function to get next version number
+get_next_version() {
+    local base_name="$1"
+    local version=2
+    
+    while branch_exists "$base_name-v$version"; do
+        ((version++))
+    done
+    
+    echo "$version"
+}
+
+# Check if original branch exists
+if branch_exists "$BRANCH_NAME"; then
+    echo "⚠️  WARNING: Branch '$BRANCH_NAME' already exists!"
+    echo ""
+    echo "📋 Existing branch details:"
+    echo "   Last commit: $(git log -1 --format='%h %s' "$BRANCH_NAME")"
+    echo "   Author: $(git log -1 --format='%an' "$BRANCH_NAME")"
+    echo "   Date: $(git log -1 --format='%ad' "$BRANCH_NAME")"
+    echo ""
+    echo "🤔 Do you want to create a new version? (y/n)"
+    read -r response
+    
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        VERSION=$(get_next_version "$BRANCH_NAME")
+        NEW_BRANCH="$BRANCH_NAME-v$VERSION"
+        
+        echo "✅ Creating new branch: $NEW_BRANCH"
+        git checkout -b "$NEW_BRANCH" "$BASE_BRANCH"
+        echo "✅ Branch '$NEW_BRANCH' created successfully"
+        echo "📝 Remember to update your commit messages to reference the new branch"
+    else
+        echo "❌ Branch creation cancelled"
+        echo "💡 You can switch to existing branch with: git checkout $BRANCH_NAME"
+        exit 1
+    fi
+else
+    echo "✅ Creating new branch: $BRANCH_NAME"
+    git checkout -b "$BRANCH_NAME" "$BASE_BRANCH"
+    echo "✅ Branch '$BRANCH_NAME' created successfully"
+fi
+```
+
+## Pre-Commit Configuration
+
+**File:** `.pre-commit-config.yaml`
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: commit-msg-format
+        name: Commit Message Format
+        entry: .git/hooks/commit-msg
+        language: system
+        stages: [commit-msg]
+      - id: trailing-whitespace
+        name: Trim Trailing Whitespace
+        entry: sed -i 's/[[:space:]]*$//'
+        language: system
+        files: \.(py|js|ts|md|json|yaml|yml)$
+      - id: end-of-file-fixer
+        name: Fix End of Files
+        # Windows: Use 'py -c', Unix/Linux/Mac: Use 'python -c' or 'python3 -c'
+        entry: py -c "import sys; [print() for f in sys.argv[1:] if open(f).read()[-1:] != '\n']"
+        language: system
+        files: \.(py|js|ts|md|json|yaml|yml)$
+        # Note: On Unix/Linux/Mac, change 'py' to 'python' or 'python3' as appropriate
+```
+
+## Quality Gates
+
+### Pre-Commit Checklist
+
+- [ ] Code follows project standards
+- [ ] All tests pass
+- [ ] Documentation updated if needed
+- [ ] Issue referenced if applicable (JIRA, GitHub, etc.)
+- [ ] Commit message is descriptive and clear
+- [ ] Code has been reviewed and understood
+- [ ] Changes are properly tested
+- [ ] No sensitive data in commit
+
+### Code Review Standards
+
+- **Understanding First**: Review all code before committing
+- **Context Documentation**: Document what changed and why
+- **Validation**: Ensure all changes are properly tested
+- **Standards Compliance**: Follow project coding standards
+
+## Pull Request Template
+
+**File:** `.github/PULL_REQUEST_TEMPLATE.md` or `.gitlab/merge_request_templates/default.md`
+
+```markdown
+## Description
+Brief description of changes made.
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation update
+- [ ] Performance improvement
+- [ ] Refactoring
+
+## Related Issues
+- Closes #[issue-number]
+- Related to #[issue-number]
+
+## Testing
+- [ ] All tests pass
+- [ ] New tests added for new functionality
+- [ ] Manual testing completed
+- [ ] Performance impact assessed
+
+## Checklist
+- [ ] Code follows project standards
+- [ ] Self-review completed
+- [ ] Documentation updated
+- [ ] Issue tracker updated
+- [ ] Commit messages follow standards
+```
+
+## Implementation Checklist
+
+### Immediate Setup (5 minutes)
+
+- [ ] Copy commit message format
+- [ ] Run `setup-commit-hooks.sh` script
+- [ ] Test with sample commit message
+- [ ] Share format with team
+- [ ] Set up branch version management script
+
+### Full Implementation (30 minutes)
+
+- [ ] Configure pre-commit hooks
+- [ ] Set up issue tracking integration
+- [ ] Create PR templates
+- [ ] Deploy branch version management workflow
+- [ ] Document team-specific adaptations
+
+### Team Adoption (1 week)
+
+- [ ] Conduct team training session
+- [ ] Monitor commit quality
+- [ ] Gather feedback and iterate
+- [ ] Document project-specific adaptations
+- [ ] Establish enforcement procedures
+
+## Customization Guide
+
+### For Your Project
+
+1. **Replace `[PROJECT_KEY]`** with your actual project key (e.g., `TEAM`, `PROJ`, `APP`)
+2. **Adjust component categories** to match your architecture
+3. **Modify commit types** if needed for your workflow
+4. **Update validation regex** in git hooks to match your format
+5. **Customize PR template** for your team's needs
+
+### Example Customization
+
+```bash
+# Standard format (always use)
+PROJ-1234 Add user authentication
+
+# With project-specific ticket prefix
+MYAPP-1234 Add user authentication
+TEAM-4567 Fix memory leak in data table
+```
+
+---
+
+**Last Updated:** 2025-10-27  
+**Version:** 1.0.0  
+**Source:** DocOriginSmokeTestScripts Project  
+**Maintained By:** AI Research Team

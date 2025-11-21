@@ -1,0 +1,86 @@
+---
+description: CRITICAL - Essential AI assistant guidelines and workflows
+alwaysApply: true
+tags: [critical, ai-assistant, workflow, rules]
+priority: 1
+version: 1.0.0
+---
+
+# CRITICAL: AI Assistant Guidelines
+
+## ⚠️ MANDATORY RULE: File Operations
+
+### NEVER USE CURSOR RULES CACHE
+
+**CRITICAL**: 
+- ❌ **NEVER** rely on Cursor's internal rules cache
+- ❌ **NEVER** assume rules are cached or available without reading files
+- ❌ **NEVER** skip reading rule files because you think they're cached
+- ✅ **ALWAYS** read rule files directly using `read_file` tool
+- ✅ **ALWAYS** write changes directly to rule files using `write` or `search_replace` tools
+- ✅ **ALWAYS** verify rule files exist and contain expected content after making changes
+- ✅ **ALWAYS** use file system tools to interact with `.cursor/rules/` files
+
+**Why**: Cursor's rules cache can be lost, corrupted, or out of sync. Always work with actual files on disk.
+
+### File Operation Workflow
+
+**When Reading Rules:**
+1. Use `read_file` tool to read `.cursor/rules/` files
+2. Never assume content based on cache
+3. Always read the actual file
+
+**When Updating Rules:**
+1. Use `read_file` to read current content
+2. Use `search_replace` or `write` to modify files
+3. Use `read_file` again to verify changes were written
+4. Never assume changes are saved without verification
+
+**When Creating New Rules:**
+1. Use `write` tool to create new `.mdc` files in `.cursor/rules/`
+2. Verify file was created using `list_dir` or `read_file`
+3. Never assume file creation succeeded without verification
+
+---
+
+## Rule File Structure
+
+### Location
+- All rules MUST be in `.cursor/rules/` directory
+- Rules are `.mdc` files (Markdown with frontmatter)
+- Rules are organized by category in subdirectories
+
+### Reading Rules
+- ✅ Use `read_file` tool to read rule files
+- ✅ Use `list_dir` to see available rules
+- ✅ Use `grep` to search rule content
+- ❌ Never rely on cached rule content
+
+### Updating Rules
+- ✅ Use `search_replace` for partial updates
+- ✅ Use `write` for complete rewrites
+- ✅ Always verify changes with `read_file` after updating
+- ❌ Never assume changes are saved without verification
+
+---
+
+## Critical Workflow Rules
+
+### ALWAYS
+- ✅ Read rule files directly from disk
+- ✅ Write rule changes directly to files
+- ✅ Verify file changes after writing
+- ✅ Use file system tools, not cache
+
+### NEVER
+- ❌ Rely on Cursor's rules cache
+- ❌ Assume rules are available without reading files
+- ❌ Skip verification of file changes
+- ❌ Use cached rule content for decisions
+
+---
+
+**Last Updated:** 2025-01-22  
+**Version:** 1.0.0  
+**Rule Type:** CRITICAL - AI Assistant Workflow  
+**Priority:** HIGHEST

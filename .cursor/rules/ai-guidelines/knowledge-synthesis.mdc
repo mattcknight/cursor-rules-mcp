@@ -1,0 +1,455 @@
+---
+description: Guidelines for synthesizing knowledge across projects
+globs: ["docs/learnings/**/*", "docs/recommendations/**/*"]
+tags: [ai-guidelines, knowledge-synthesis, meta-project]
+priority: 5
+version: 1.0.0
+---
+
+# Knowledge Synthesis Guidelines
+
+## Purpose
+
+This document provides guidance for AI assistants on how to synthesize knowledge from multiple projects into reusable templates and best practices.
+
+## Core Principles
+
+### 1. Pattern Recognition
+
+**Identify recurring patterns across projects:**
+
+- Similar problems solved in different ways
+- Common pain points and solutions
+- Successful approaches that worked well
+- Failed approaches to avoid
+
+**Process:**
+1. Review learning documents from multiple projects
+2. Identify common themes and patterns
+3. Extract generalizable principles
+4. Document variations and context
+
+**Example:**
+```markdown
+## Pattern: Configuration Management
+
+**Observed in:** 3 of 5 projects
+
+**Common Approach:**
+- JSON configuration files
+- Environment-specific overrides
+- Validation on startup
+
+**Variations:**
+- Project A: Single config file with environment sections
+- Project B: Separate files per environment
+- Project C: Database-driven configuration
+
+**Recommendation:**
+Use separate files per environment for better security and clarity.
+```
+
+### 2. Context Preservation
+
+**Always preserve context when extracting patterns:**
+
+- What was the original problem?
+- What constraints existed?
+- Why was this approach chosen?
+- What alternatives were considered?
+
+**Anti-Pattern:**
+```markdown
+# Bad: No context
+Use JWT tokens for authentication.
+```
+
+**Best Practice:**
+```markdown
+# Good: With context
+Use JWT tokens for authentication in stateless APIs where:
+- Multiple services need to verify tokens
+- Session storage is not available
+- Horizontal scaling is required
+
+Alternative: Session-based auth works better for:
+- Single-server applications
+- When you need server-side session invalidation
+- When token size is a concern
+```
+
+### 3. Generalization
+
+**Extract general principles from specific implementations:**
+
+**Process:**
+1. Identify project-specific details
+2. Abstract to general concepts
+3. Document customization points
+4. Provide multiple examples
+
+**Example:**
+```markdown
+# Specific (Project A)
+"Use CLAIMSPAY-1234 format for JIRA tickets"
+
+# Generalized
+"Use [PROJECT_KEY]-[NUMBER] format for issue tracking"
+
+# With customization guidance
+"Replace [PROJECT_KEY] with your project's identifier:
+- JIRA: Use project key (e.g., PROJ, TEAM)
+- GitHub: Use #[NUMBER] format
+- Linear: Use [TEAM]-[NUMBER] format"
+```
+
+### 4. Evidence-Based Recommendations
+
+**Base recommendations on actual project experience:**
+
+- Cite specific projects where patterns were used
+- Include success metrics when available
+- Document failures and lessons learned
+- Provide before/after comparisons
+
+**Template:**
+```markdown
+## Recommendation: [Title]
+
+**Evidence:**
+- Used in: [Project A], [Project B]
+- Success rate: [X of Y projects]
+- Key benefit: [Measured improvement]
+
+**Example from [Project A]:**
+[Specific example with results]
+
+**Lessons Learned:**
+- [What worked well]
+- [What could be improved]
+- [What to avoid]
+```
+
+## Synthesis Process
+
+### Step 1: Collect Learning Documents
+
+**From each project, gather:**
+- Comprehensive workspace analysis
+- Persona usage analysis
+- Project standards and patterns
+- Cross-project analysis (if available)
+
+**Organize by:**
+- Project name
+- Date created
+- Document type
+- Key topics
+
+### Step 2: Identify Common Themes
+
+**Look for:**
+- Repeated problems
+- Similar solutions
+- Common tools and technologies
+- Shared best practices
+- Universal pain points
+
+**Create theme map:**
+```markdown
+## Theme: Git Workflow
+
+**Projects:** A, B, C, D
+**Common Elements:**
+- Commit message standards
+- Branch naming conventions
+- PR templates
+
+**Variations:**
+- Project A: JIRA integration
+- Project B: GitHub Issues
+- Project C: No issue tracking
+
+**Synthesis:**
+Create flexible template supporting multiple issue trackers
+```
+
+### Step 3: Extract Patterns
+
+**For each theme:**
+1. Document the pattern
+2. Explain when to use it
+3. Provide implementation examples
+4. Note variations and customizations
+5. Include anti-patterns to avoid
+
+**Pattern Template:**
+```markdown
+## Pattern: [Name]
+
+**Category:** [Git, Documentation, Testing, etc.]
+
+**Problem:**
+[What problem does this solve?]
+
+**Solution:**
+[General solution approach]
+
+**When to Use:**
+- [Condition 1]
+- [Condition 2]
+
+**When NOT to Use:**
+- [Condition 1]
+- [Condition 2]
+
+**Implementation:**
+[Step-by-step guide]
+
+**Examples:**
+[Multiple concrete examples]
+
+**Variations:**
+[Different approaches for different contexts]
+
+**Anti-Patterns:**
+[What to avoid]
+```
+
+### Step 4: Create Reusable Templates
+
+**Transform patterns into templates:**
+
+1. **Generalize specifics:** Replace project names with placeholders
+2. **Add customization points:** Mark what needs to be changed
+3. **Provide examples:** Show multiple use cases
+4. **Document rationale:** Explain why this approach works
+5. **Include validation:** How to verify correct implementation
+
+**Template Structure:**
+```markdown
+# [Template Name]
+
+## Purpose
+[What this template provides]
+
+## When to Use
+[Appropriate scenarios]
+
+## Customization Points
+1. **[Point 1]:** [What to customize and how]
+2. **[Point 2]:** [What to customize and how]
+
+## Implementation
+[Step-by-step instructions]
+
+## Examples
+### Example 1: [Scenario]
+[Complete example]
+
+### Example 2: [Different Scenario]
+[Complete example]
+
+## Validation
+- [ ] [Check 1]
+- [ ] [Check 2]
+
+## Related
+- [Link to related templates]
+- [Link to source projects]
+```
+
+### Step 5: Validate and Iterate
+
+**Validation process:**
+1. Test template with new project
+2. Gather feedback from users
+3. Identify gaps or unclear sections
+4. Refine based on feedback
+5. Update with new learnings
+
+**Feedback loop:**
+```markdown
+## Template Feedback
+
+**Project:** [Name]
+**Date:** [YYYY-MM-DD]
+**User:** [Name]
+
+**What Worked:**
+- [Positive feedback]
+
+**What Didn't Work:**
+- [Issues encountered]
+
+**Suggestions:**
+- [Improvements]
+
+**Action Items:**
+- [ ] [Update 1]
+- [ ] [Update 2]
+```
+
+## Analysis Techniques
+
+### Comparative Analysis
+
+**Compare approaches across projects:**
+
+```markdown
+## Comparative Analysis: Testing Strategies
+
+| Aspect | Project A | Project B | Project C |
+|--------|-----------|-----------|-----------|
+| Framework | Jest | pytest | JUnit |
+| Coverage | 80% | 65% | 90% |
+| Approach | TDD | Test-after | Mixed |
+| CI Integration | GitHub Actions | GitLab CI | Jenkins |
+
+**Insights:**
+- Higher coverage correlates with TDD approach
+- Framework choice driven by language
+- All projects use CI for automated testing
+
+**Recommendation:**
+Adopt TDD approach with coverage target of 80%+
+```
+
+### Frequency Analysis
+
+**Identify most common practices:**
+
+```markdown
+## Frequency Analysis: Documentation Practices
+
+**Observed in 5 projects:**
+
+| Practice | Frequency | Success Rate |
+|----------|-----------|--------------|
+| README.md | 5/5 | 100% |
+| API docs | 4/5 | 80% |
+| Architecture diagrams | 3/5 | 60% |
+| Learning docs | 2/5 | 40% |
+| Audit trail | 1/5 | 20% |
+
+**Insights:**
+- README is universal and essential
+- API docs highly valuable when present
+- Learning docs underutilized but valuable
+
+**Recommendation:**
+Standardize on README + API docs + learning docs
+```
+
+### Success Factor Analysis
+
+**Identify what makes projects successful:**
+
+```markdown
+## Success Factors: AI-Assisted Development
+
+**High-performing projects (A, B):**
+- Clear persona definitions
+- Comprehensive documentation
+- Regular learning capture
+- Structured git workflow
+
+**Lower-performing projects (D, E):**
+- Ad-hoc AI usage
+- Minimal documentation
+- No learning capture
+- Inconsistent git practices
+
+**Key Differentiators:**
+1. Persona-based approach (2x productivity)
+2. Documentation standards (50% faster onboarding)
+3. Learning capture (fewer repeated mistakes)
+
+**Recommendation:**
+Adopt persona-based approach with strong documentation
+```
+
+## Quality Standards
+
+### Synthesis Quality Checklist
+
+- [ ] **Evidence-based:** All recommendations backed by project data
+- [ ] **Generalized:** Project-specific details abstracted
+- [ ] **Contextualized:** Appropriate context preserved
+- [ ] **Actionable:** Clear implementation guidance provided
+- [ ] **Validated:** Tested with at least one new project
+- [ ] **Documented:** Rationale and alternatives explained
+- [ ] **Examples:** Multiple concrete examples included
+- [ ] **Customizable:** Clear customization points identified
+
+### Documentation Quality
+
+- [ ] **Clear:** Easy to understand for target audience
+- [ ] **Complete:** All necessary information included
+- [ ] **Correct:** Technically accurate and current
+- [ ] **Consistent:** Follows documentation standards
+- [ ] **Comprehensive:** Covers common scenarios
+- [ ] **Concise:** No unnecessary verbosity
+- [ ] **Current:** Up-to-date with latest learnings
+
+## Meta-Learning
+
+### Continuous Improvement
+
+**Track synthesis effectiveness:**
+
+```markdown
+## Synthesis Effectiveness Metrics
+
+**Template:** Git Workflow Standards
+**Version:** 1.0.0
+**Adopted by:** 3 projects
+**Feedback score:** 4.5/5
+
+**What's Working:**
+- Clear commit message format
+- Branch naming conventions
+- Git hook scripts
+
+**What Needs Improvement:**
+- PR template too verbose
+- Missing examples for monorepos
+- Unclear guidance for hotfixes
+
+**Action Items:**
+- [ ] Simplify PR template
+- [ ] Add monorepo examples
+- [ ] Add hotfix workflow section
+```
+
+### Pattern Evolution
+
+**Document how patterns evolve:**
+
+```markdown
+## Pattern Evolution: Configuration Management
+
+**Version 1.0 (2025-01):**
+- Single JSON file
+- Environment variables for secrets
+
+**Version 1.1 (2025-04):**
+- Added: Separate files per environment
+- Reason: Better security and clarity
+
+**Version 2.0 (2025-07):**
+- Added: Schema validation
+- Added: Hot-reload support
+- Reason: Prevent config errors, improve DX
+
+**Version 2.1 (2025-10):**
+- Added: Encrypted secrets support
+- Reason: Enhanced security requirements
+```
+
+---
+
+**Last Updated:** 2025-10-27  
+**Version:** 1.0.0  
+**Maintained By:** AI Research Team  
+**Review Cycle:** Quarterly

@@ -1,0 +1,145 @@
+---
+description: Project overview and context for AI assistance
+alwaysApply: true
+---
+
+# Project Overview
+
+## Replace This Section With Your Project Details
+
+**Project Name:** [Your Project Name]
+**Type:** [Web App / Mobile App / API / Library / CLI Tool / etc.]
+**Primary Language:** [JavaScript / Python / Java / Go / Ruby / etc.]
+**Framework:** [React / Django / Spring / etc., or None]
+
+## Purpose
+
+[Brief description of what this project does]
+
+Example:
+> This is an e-commerce platform that connects buyers with local sellers.
+> It handles product listings, orders, payments, and shipping logistics.
+
+## Technology Stack
+
+Update this list with your actual stack:
+
+**Frontend:**
+- [ ] Framework: (React / Vue / Angular / Svelte / None)
+- [ ] Language: (TypeScript / JavaScript)
+- [ ] State Management: (Redux / Zustand / Context / etc.)
+- [ ] Styling: (Tailwind / CSS Modules / Styled Components)
+
+**Backend:**
+- [ ] Language: (Node.js / Python / Java / Go / Ruby / PHP)
+- [ ] Framework: (Express / FastAPI / Spring / Gin / Rails / Laravel)
+- [ ] Database: (PostgreSQL / MySQL / MongoDB / SQLite)
+- [ ] ORM: (Prisma / TypeORM / SQLAlchemy / etc.)
+
+**Infrastructure:**
+- [ ] Hosting: (AWS / Azure / GCP / Vercel / Heroku)
+- [ ] CI/CD: (GitHub Actions / GitLab CI / Jenkins)
+- [ ] Containerization: (Docker / Kubernetes / None)
+
+**Testing:**
+- [ ] Unit Testing: (Jest / pytest / JUnit / Go test)
+- [ ] E2E Testing: (Playwright / Cypress / Selenium)
+- [ ] Mocking: (Mock Service Worker / unittest.mock / Mockito)
+
+## Project Structure
+
+Document your folder structure:
+
+```
+your-project/
+├── src/                 # Source code
+├── tests/              # Test files
+├── docs/               # Documentation
+├── config/             # Configuration files
+└── scripts/            # Build/deployment scripts
+```
+
+## Key Design Principles
+
+List the principles your team follows:
+
+1. **[Principle Name]**: Brief description
+2. **[Principle Name]**: Brief description
+3. **[Principle Name]**: Brief description
+
+Examples:
+- **Simplicity First**: Prefer simple, straightforward solutions
+- **Test-Driven**: Write tests before implementation
+- **Documentation**: Code should be self-documenting with clear names
+
+## Domain/Business Context
+
+Explain the business domain in simple terms:
+
+**Key Concepts:**
+- **[Term]**: Definition
+- **[Term]**: Definition
+- **[Term]**: Definition
+
+**Business Rules:**
+- Rule 1
+- Rule 2
+- Rule 3
+
+## AI Guidelines
+
+### When Generating Code:
+1. Match the existing code style in this project
+2. Follow the patterns used in similar files
+3. Ask for clarification if requirements are unclear
+4. Prioritize readability and maintainability
+5. Include appropriate error handling
+
+### When Refactoring:
+1. Preserve existing functionality
+2. Make incremental changes
+3. Update related tests
+4. Keep changes focused and reviewable
+
+### When Writing Tests:
+1. Use the same testing framework as existing tests
+2. Follow the established test structure
+3. Write clear, descriptive test names
+4. Cover edge cases and error conditions
+
+## Critical Rules
+
+**ALWAYS:**
+- ✅ Write readable, maintainable code
+- ✅ Follow existing patterns in the codebase
+- ✅ Include error handling
+- ✅ Write tests for new code
+- ✅ Use clear, descriptive names
+
+**NEVER:**
+- ❌ Hardcode sensitive data (passwords, API keys)
+- ❌ Ignore errors silently
+- ❌ Write code without understanding it
+- ❌ Introduce breaking changes without discussion
+- ❌ Skip input validation
+
+## Getting Help
+
+When uncertain about:
+- **Patterns**: Check existing similar code
+- **Standards**: See `.cursor/rules/10-code-style.mdc`
+- **Architecture**: See `docs/architecture/`
+- **Anything else**: Ask the team!
+
+---
+
+## 📝 Customization Checklist
+
+Before using this template:
+- [ ] Update project name and description
+- [ ] Fill in technology stack
+- [ ] Document project structure
+- [ ] Add key design principles
+- [ ] Define domain concepts (if applicable)
+- [ ] Customize AI guidelines for your workflow
+- [ ] Add team-specific rules

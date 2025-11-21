@@ -1,0 +1,102 @@
+---
+description: CRITICAL - This is a template repository. Developers copy rules to their production projects.
+globs: "**/*"
+tags: [critical, template, onboarding]
+priority: 1
+version: 1.0.0
+---
+
+# CRITICAL: Template Purpose & Usage Instructions
+
+## ⚠️ READ THIS FIRST ⚠️
+
+**This is a TEMPLATE repository. You should copy the rules to your production project.**
+
+### What This Template Is
+
+This repository contains **reusable `.cursor/rules` templates** that you can copy to your production development projects to enable AI-assisted development with specialized personas.
+
+### How to Use This Template
+
+1. **Copy Rules to Your Project**
+   ```bash
+   # Copy .cursor/rules/ directory to your project
+   cp -r .cursor/rules/ /path/to/your/project/.cursor/
+   ```
+
+2. **Customize Project Context**
+   - Update `.cursor/rules/core/project-overview.mdc` with YOUR project details
+   - Replace `[Your Project Name]` placeholders
+   - Remove or update this file (`meta-project-purpose.mdc`) if needed
+
+3. **Select Relevant Personas**
+   - Choose from 19 available personas based on your needs
+   - Disable unused personas by commenting out `@import` statements in `rules.mdc`
+
+4. **Start Using Personas**
+   ```markdown
+   @persona-developer
+   
+   I need to implement [feature]. Please review requirements and propose approach.
+   ```
+
+### What This Template Provides
+
+1. **19 Specialized AI Personas**
+   - Developer, Architect, QA Engineer, Security Analyst, etc.
+   - Pre-configured for production code development
+   - Ready to use immediately
+
+2. **Production-Ready Standards**
+   - Git workflow standards (commit messages, branch naming)
+   - Code style guidelines
+   - Testing standards
+   - Documentation standards
+   - All designed for production code
+
+3. **Best Practices**
+   - Industry-standard patterns
+   - Cross-project learnings
+   - Proven workflows
+
+### Important Notes
+
+- ✅ **This template is FOR production code** - All rules are designed for real development projects
+- ✅ **Customize for your project** - Update project-specific values (names, keys, etc.)
+- ✅ **Remove template-specific files** - Delete meta-project documentation if not needed
+- ✅ **Focus on your code** - Use personas to help write, review, and maintain your production code
+
+### Files You Should Customize
+
+- **REQUIRED:** `.cursor/rules/core/project-overview.mdc` - Fill in your project details
+- **OPTIONAL:** Remove meta-project files if not maintaining templates:
+  - `ai-guidelines/knowledge-synthesis.mdc` (for template creators)
+  - `ai-guidelines/template-generation.mdc` (for template creators)
+  - `.cursor/rules/README.md` (template repository documentation)
+
+### Files You Should Keep
+
+- ✅ All persona files (`personas/*.mdc`) - Use these for AI assistance
+- ✅ Development standards (`development/*.mdc`) - Production code standards
+- ✅ Documentation standards (`documentation/*.mdc`) - Documentation guidelines
+- ✅ AI guidelines (`ai-guidelines/*.mdc`) - Except template-generation files if not maintaining templates
+
+---
+
+## For Template Maintainers Only
+
+**If you are maintaining this template repository** (not using it for production code):
+
+This repository is a **meta-project** that:
+- Aggregates learnings from multiple AI-assisted development projects
+- Creates reusable `.cursor/rules` templates for other developers
+- Documents best practices and patterns
+
+See `.cursor/rules/README.md` for template maintenance guidelines.
+
+---
+
+**Last Updated:** 2025-01-22  
+**Version:** 1.0.0  
+**Template Type:** Multi-Persona AI Development Rules  
+**Primary Purpose:** Enable AI-assisted production code development

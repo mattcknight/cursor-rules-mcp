@@ -1,0 +1,349 @@
+---
+description: Standard tag taxonomy for consistent rule categorization and discovery
+alwaysApply: false
+tags: [critical, standards, taxonomy, tags, categorization]
+priority: 1
+version: 1.0.0
+---
+
+# Tag Taxonomy Standards
+
+**Standardized tag categories for consistent rule organization and discovery.**
+
+---
+
+## Core Principle
+
+**Use a hierarchical tag taxonomy with predefined categories to enable efficient rule discovery, filtering, and organization.**
+
+---
+
+## Standard Tag Categories
+
+### Category 1: Rule Type
+
+**Purpose:** Classify the fundamental type/purpose of the rule.
+
+| Tag | Usage | Example Rules |
+|-----|-------|---------------|
+| `critical` | Foundational, zero-tolerance rules | `ai-behavior-standards.mdc` |
+| `workflow` | Process and procedure rules | `git-workflow.mdc`, `phase-commit-workflow.mdc` |
+| `standards` | Coding/documentation standards | `code-style.mdc`, `documentation-naming-conventions.mdc` |
+| `guidelines` | Best practices and recommendations | `analysis-methodology-and-standards.mdc` |
+| `reference` | Reference documents and glossaries | `terminology-standards.mdc` |
+
+---
+
+### Category 2: Domain/Area
+
+**Purpose:** Identify the functional area the rule applies to.
+
+| Tag | Usage | Example Rules |
+|-----|-------|---------------|
+| `development` | Software development rules | `code-style.mdc`, `testing.mdc` |
+| `documentation` | Documentation creation rules | `documentation-naming-conventions.mdc` |
+| `ai-guidelines` | AI behavior and communication | `ai-behavior-standards.mdc` |
+| `git` | Git version control | `git-workflow.mdc`, `version-tagging.mdc` |
+| `testing` | Testing standards and practices | `testing.mdc`, `test-coverage-requirements.mdc` |
+| `analysis` | Code analysis and methodology | `analysis-methodology-and-standards.mdc` |
+| `architecture` | Architecture patterns | `clean-architecture-guidelines.mdc` |
+| `security` | Security standards | `security-patterns.mdc` |
+
+---
+
+### Category 3: Persona/Role
+
+**Purpose:** Associate rule with specific AI personas.
+
+| Tag | Usage | Example Rules |
+|-----|-------|---------------|
+| `persona` | Generic persona tag | All persona files |
+| `developer` | Software developer persona | `persona-developer.mdc` |
+| `architect` | Solution architect persona | `persona-solution-architect.mdc` |
+| `qa-engineer` | QA engineer persona | `persona-qa-engineer.mdc` |
+| `devops` | DevOps engineer persona | `persona-devops-engineer.mdc` |
+| `analyst` | Various analyst personas | `persona-data-flow-analyst.mdc` |
+
+---
+
+### Category 4: Scope
+
+**Purpose:** Define the applicability scope of the rule.
+
+| Tag | Usage | Example Rules |
+|-----|-------|---------------|
+| `project-specific` | Specific to current project | `[project-name]-testing-requirements.mdc` |
+| `template` | Template repository rules | `template-generation.mdc` |
+| `universal` | Applies to all projects | `ai-behavior-standards.mdc` |
+| `integration` | External system integration | `jira-integration-best-practices.mdc` |
+
+---
+
+### Category 5: Technical Focus
+
+**Purpose:** Specify technical aspects covered by the rule.
+
+| Tag | Usage | Example Rules |
+|-----|-------|---------------|
+| `file-naming` | File naming conventions | `documentation-naming-conventions.mdc` |
+| `versioning` | Version management | `version-tagging.mdc`, `semantic-versioning.mdc` |
+| `automation` | Automation and tooling | `terminal-automation.mdc` |
+| `commit` | Git commit standards | `git-workflow.mdc` |
+| `branch` | Git branch management | `git-workflow.mdc` |
+| `code-review` | Code review practices | `persona-developer.mdc` |
+| `refactoring` | Refactoring guidelines | `holistic-refactoring-workflow.mdc` |
+
+---
+
+### Category 6: Priority/Importance
+
+**Purpose:** Indicate rule criticality (use sparingly, prefer `priority` field).
+
+| Tag | Usage | Example Rules |
+|-----|-------|---------------|
+| `mandatory` | Must be followed | `ai-behavior-standards.mdc` |
+| `critical` | Critical rules | Most 00-critical/ files |
+| `recommended` | Best practice but not required | Various guideline files |
+
+---
+
+## Tag Usage Guidelines
+
+### Mandatory Tags
+
+**Every rule MUST have:**
+1. **At least 1 Rule Type tag** (`critical`, `workflow`, `standards`, `guidelines`, `reference`)
+2. **At least 1 Domain tag** (`development`, `documentation`, `ai-guidelines`, etc.)
+
+**Example Minimum:**
+```yaml
+tags: [standards, development]
+```
+
+### Recommended Tags
+
+**Rules SHOULD include (when applicable):**
+- Persona tags (if persona-specific)
+- Scope tags (if not universal)
+- Technical focus tags (for specific aspects)
+
+**Example Comprehensive:**
+```yaml
+tags: [workflow, development, git, versioning, commit, branch, mandatory]
+```
+
+### Maximum Tags
+
+**Limit:** 5-7 tags per rule maximum
+
+**Rationale:** Too many tags dilute meaning and make filtering ineffective.
+
+---
+
+## Tag Naming Conventions
+
+### Format Rules
+
+- ✅ Use **kebab-case**: `ai-guidelines`, `code-review`, `test-coverage`
+- ✅ Use **singular form**: `persona`, `workflow`, `standard`
+- ✅ Use **descriptive names**: `file-naming`, not `files`
+- ❌ Avoid acronyms unless widely known: `qa-engineer` (OK), `tpm` (NO)
+- ❌ Avoid generic terms: `general`, `misc`, `other`
+
+### Consistency Rules
+
+- ✅ Use existing tags when possible
+- ✅ Check tag list before creating new tags
+- ✅ Consolidate similar tags (`developer` + `development` → use both appropriately)
+- ❌ Don't create near-duplicate tags: `testing` + `tests` → use `testing` only
+
+---
+
+## Standard Tag Combinations
+
+### By Rule Category
+
+**Critical Rules:**
+```yaml
+tags: [critical, ai-guidelines, workflow, mandatory]
+```
+
+**Development Standards:**
+```yaml
+tags: [standards, development, code-style]
+```
+
+**Documentation Rules:**
+```yaml
+tags: [standards, documentation, file-naming, versioning]
+```
+
+**Git Workflow:**
+```yaml
+tags: [workflow, git, commit, branch, versioning]
+```
+
+**Persona Files:**
+```yaml
+tags: [persona, developer, core, fundamentals]
+```
+
+**Testing Rules:**
+```yaml
+tags: [standards, development, testing, quality, coverage]
+```
+
+---
+
+## Tag Migration Strategy
+
+### Phase 1: Audit Current Tags
+
+1. List all existing tags
+2. Identify duplicates and near-duplicates
+3. Map to standard taxonomy
+4. Create consolidation plan
+
+### Phase 2: Standardize Existing Rules
+
+1. Update rule frontmatter with standard tags
+2. Add missing mandatory tags
+3. Remove redundant tags
+4. Limit to 5-7 tags maximum
+
+### Phase 3: Enforce for New Rules
+
+1. Require standard tags in new rules
+2. Validate against taxonomy
+3. Review in code review process
+
+---
+
+## Tag Discovery and Search
+
+### Finding Rules by Tag
+
+**Grep command:**
+```powershell
+# Find all rules with specific tag
+Get-ChildItem ".cursor/rules" -Recurse -Filter "*.mdc" | Select-String -Pattern "tags:.*\bdevelopment\b"
+
+# Find rules with multiple tags
+Get-ChildItem ".cursor/rules" -Recurse -Filter "*.mdc" | Select-String -Pattern "tags:.*\bdevelopment\b.*\btesting\b"
+```
+
+**Common search patterns:**
+- All persona files: `grep -r "tags:.*persona"`
+- All critical rules: `grep -r "tags:.*critical"`
+- All git-related: `grep -r "tags:.*git"`
+- All documentation rules: `grep -r "tags:.*documentation"`
+
+---
+
+## Examples by Rule Type
+
+### Critical Rule
+```yaml
+---
+description: AI behavior standards for factual communication
+alwaysApply: true
+tags: [critical, ai-guidelines, behavior, standards, mandatory]
+priority: 1
+version: 2.0.0
+---
+```
+
+### Development Standard
+```yaml
+---
+description: C# coding style standards and conventions
+alwaysApply: false
+tags: [standards, development, code-style, dotnet]
+priority: 2
+version: 1.0.0
+---
+```
+
+### Documentation Rule
+```yaml
+---
+description: Comprehensive documentation naming conventions
+alwaysApply: false
+tags: [standards, documentation, file-naming, versioning, conventions]
+priority: 2
+version: 2.0.0
+---
+```
+
+### Workflow Rule
+```yaml
+---
+description: Git workflow standards and commit patterns
+alwaysApply: false
+tags: [workflow, git, commit, branch, versioning]
+priority: 2
+version: 1.0.0
+---
+```
+
+### Persona Rule
+```yaml
+---
+description: Software Developer Core - fundamentals and workflow
+alwaysApply: false
+tags: [persona, developer, core, fundamentals]
+priority: 2
+version: 1.0.0
+relatedPersonas: [persona-developer-dotnet, persona-developer-testing]
+---
+```
+
+---
+
+## Prohibited Tags
+
+### ❌ Never Use These Tags
+
+| Avoid | Reason | Use Instead |
+|-------|--------|-------------|
+| `general` | Too vague | Specific domain tag |
+| `misc` | Meaningless | Specific category |
+| `other` | Non-descriptive | Specific purpose |
+| `temp` | Temporary indicator | Remove or use proper tag |
+| `old` | Version indicator | Use `version` field |
+| `new` | Not informative | Use `version` field |
+| `important` | Use `priority` field | `critical` tag or priority field |
+| `urgent` | Subjective | Use priority field |
+
+---
+
+## Verification Checklist
+
+Before committing rules with tags:
+
+- [ ] At least 1 Rule Type tag present
+- [ ] At least 1 Domain tag present
+- [ ] Tags follow kebab-case format
+- [ ] Tags are singular form
+- [ ] Maximum 7 tags
+- [ ] No prohibited tags used
+- [ ] Tags match standard taxonomy
+- [ ] No duplicate/redundant tags
+
+---
+
+## Remember
+
+✅ **Consistency** - Use standard tags across all rules
+✅ **Discoverability** - Tags enable efficient rule search
+✅ **Clarity** - Descriptive tags communicate purpose
+✅ **Moderation** - 5-7 tags maximum per rule
+✅ **Standardization** - Follow taxonomy, don't invent new tags
+
+---
+
+**Version:** 1.0.0  
+**Last Updated:** 2025-11-17  
+**Status:** ACTIVE  
+**Priority:** 1  
+**Always Apply:** false (reference document)

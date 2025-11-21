@@ -1,0 +1,466 @@
+---
+description: Documentation standards and best practices
+globs: ["**/*.md", "**/*.mdc", "**/README*"]
+tags: [documentation, standards, markdown]
+priority: 4
+version: 1.0.0
+---
+
+# Documentation Standards
+
+## Overview
+
+Comprehensive documentation is critical for knowledge transfer, onboarding, and long-term project maintenance. This document establishes standards for all project documentation.
+
+## Documentation Types
+
+### 1. Code Documentation
+
+**Purpose:** Explain code behavior and design decisions
+
+**Location:** Inline comments, docstrings, JSDoc, etc.
+
+**Standards:**
+- Document "why," not just "what"
+- Explain complex algorithms
+- Note non-obvious behavior
+- Include examples for public APIs
+- Keep comments up-to-date with code changes
+
+**Example:**
+```python
+def calculate_compound_interest(principal, rate, time, compounds_per_year=12):
+    """
+    Calculate compound interest using the standard formula.
+    
+    Note: This uses monthly compounding by default (compounds_per_year=12)
+    because that's the standard for most financial products in our domain.
+    
+    Args:
+        principal: Initial investment amount
+        rate: Annual interest rate (as decimal, e.g., 0.05 for 5%)
+        time: Time period in years
+        compounds_per_year: Number of times interest compounds per year
+        
+    Returns:
+        Final amount after compound interest
+        
+    Example:
+        >>> calculate_compound_interest(1000, 0.05, 10)
+        1647.01
+    """
+    return principal * (1 + rate / compounds_per_year) ** (compounds_per_year * time)
+```
+
+### 2. README Files
+
+**Purpose:** Project overview and quick-start guide
+
+**Required Sections:**
+- Project title and description
+- Prerequisites
+- Installation instructions
+- Basic usage examples
+- Configuration guide
+- Contributing guidelines
+- License information
+
+**Template:**
+```markdown
+# Project Name
+
+Brief description of what this project does.
+
+## Prerequisites
+
+- Node.js 18+
+- PostgreSQL 14+
+- Redis 6+
+
+## Installation
+
+\`\`\`bash
+npm install
+cp .env.example .env
+npm run migrate
+\`\`\`
+
+## Usage
+
+\`\`\`bash
+npm start
+\`\`\`
+
+## Configuration
+
+See [Configuration Guide](docs/configuration.md)
+
+## Contributing
+
+See [Contributing Guidelines](CONTRIBUTING.md)
+
+## License
+
+MIT License - see [LICENSE](LICENSE)
+```
+
+### 3. API Documentation
+
+**Purpose:** Document API endpoints, parameters, and responses
+
+**Standards:**
+- Document all public endpoints
+- Include request/response examples
+- Specify authentication requirements
+- List possible error codes
+- Provide cURL examples
+
+**Example:**
+```markdown
+## POST /api/users
+
+Create a new user account.
+
+**Authentication:** Required (Bearer token)
+
+**Request Body:**
+\`\`\`json
+{
+  "email": "user@example.com",
+  "name": "John Doe",
+  "role": "user"
+}
+\`\`\`
+
+**Response (201 Created):**
+\`\`\`json
+{
+  "id": "usr_1234567890",
+  "email": "user@example.com",
+  "name": "John Doe",
+  "role": "user",
+  "created_at": "2025-10-27T10:00:00Z"
+}
+\`\`\`
+
+**Error Responses:**
+- `400 Bad Request`: Invalid input data
+- `401 Unauthorized`: Missing or invalid authentication
+- `409 Conflict`: Email already exists
+
+**Example:**
+\`\`\`bash
+curl -X POST https://api.example.com/api/users \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","name":"John Doe","role":"user"}'
+\`\`\`
+```
+
+### 4. Architecture Documentation
+
+**Purpose:** Explain system design and component interactions
+
+**Required Content:**
+- System architecture diagrams
+- Component descriptions
+- Data flow diagrams
+- Technology stack
+- Design decisions and rationale
+
+**Example Structure:**
+```markdown
+# System Architecture
+
+## Overview
+
+[High-level description of the system]
+
+## Components
+
+### Frontend (React)
+- User interface
+- State management with Redux
+- API client
+
+### Backend (Node.js/Express)
+- RESTful API
+- Business logic
+- Database access layer
+
+### Database (PostgreSQL)
+- User data
+- Transaction records
+- Audit logs
+
+## Data Flow
+
+1. User submits form in frontend
+2. Frontend validates input
+3. API request sent to backend
+4. Backend validates and processes
+5. Database updated
+6. Response returned to frontend
+7. UI updated with result
+
+## Design Decisions
+
+### Why PostgreSQL?
+- ACID compliance required for financial data
+- Strong support for complex queries
+- Excellent performance for our scale
+```
+
+### 5. Learning Documentation
+
+**Purpose:** Capture insights, lessons learned, and best practices
+
+**Location:** `docs/learnings/`
+
+**Format:**
+```markdown
+# [Topic] - YYYY-MM-DD
+
+## Context
+[What was the situation?]
+
+## Problem
+[What challenge did we face?]
+
+## Solution
+[How did we solve it?]
+
+## Lessons Learned
+- [Key insight 1]
+- [Key insight 2]
+- [Key insight 3]
+
+## Recommendations
+- [Action item 1]
+- [Action item 2]
+
+## Related
+- [Link to related docs]
+- [Link to code changes]
+```
+
+### 6. Recommendation Documentation
+
+**Purpose:** Document recommendations for improvements
+
+**Location:** `docs/recommendations/`
+
+**Format:**
+```markdown
+# [Recommendation Title] - YYYY-MM-DD_HHMMSS
+
+## Executive Summary
+[Brief overview of recommendation]
+
+## Current State
+[What is the current situation?]
+
+## Proposed Change
+[What do we recommend?]
+
+## Benefits
+- [Benefit 1]
+- [Benefit 2]
+
+## Implementation
+1. [Step 1]
+2. [Step 2]
+
+## Risks and Mitigation
+- **Risk:** [Description]
+  **Mitigation:** [How to address]
+
+## Timeline
+- Phase 1: [Duration and scope]
+- Phase 2: [Duration and scope]
+
+## Success Metrics
+- [Metric 1]
+- [Metric 2]
+```
+
+## Markdown Standards
+
+### Formatting
+
+- Use ATX-style headers (`#`, `##`, `###`)
+- Use fenced code blocks with language tags
+- Use tables for structured data
+- Use lists for sequences and collections
+- Use bold for emphasis, italics for subtle emphasis
+
+### Code Blocks
+
+Always specify the language:
+
+```markdown
+\`\`\`python
+def hello():
+    print("Hello, World!")
+\`\`\`
+```
+
+Not:
+```markdown
+\`\`\`
+def hello():
+    print("Hello, World!")
+\`\`\`
+```
+
+### Links
+
+Use descriptive link text:
+
+```markdown
+See the [API Documentation](docs/api.md) for details.
+```
+
+Not:
+```markdown
+Click [here](docs/api.md) for API docs.
+```
+
+### File References
+
+Use inline code for file names:
+
+```markdown
+Edit the `config.yaml` file to change settings.
+```
+
+### Tables
+
+Use tables for structured comparisons:
+
+```markdown
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Auth    | ✅     | Complete |
+| API     | 🚧     | In progress |
+| Tests   | ❌     | Not started |
+```
+
+## Documentation Maintenance
+
+### Update Triggers
+
+Documentation should be updated when:
+
+- [ ] Code behavior changes
+- [ ] New features are added
+- [ ] APIs are modified
+- [ ] Configuration changes
+- [ ] Dependencies are updated
+- [ ] Architecture evolves
+- [ ] Lessons are learned
+
+### Review Cycle
+
+- **Code documentation:** Review during code review
+- **README files:** Review quarterly
+- **API documentation:** Review with each API change
+- **Architecture docs:** Review semi-annually
+- **Learning docs:** Review annually for relevance
+
+### Deprecation
+
+When deprecating features:
+
+1. Mark as deprecated in documentation
+2. Provide migration path
+3. Set removal timeline
+4. Update examples to use new approach
+5. Keep deprecated docs until removal
+
+**Example:**
+```markdown
+## ⚠️ DEPRECATED: Old Authentication Method
+
+**Status:** Deprecated as of 2025-10-01  
+**Removal:** Planned for 2026-01-01  
+**Migration:** See [New Authentication Guide](auth-v2.md)
+
+This authentication method is deprecated. Please migrate to the new JWT-based
+authentication system. See the migration guide for step-by-step instructions.
+```
+
+## Quality Checklist
+
+Before publishing documentation:
+
+- [ ] **Accuracy:** All information is correct and current
+- [ ] **Completeness:** All necessary topics are covered
+- [ ] **Clarity:** Language is clear and unambiguous
+- [ ] **Examples:** Concrete examples are provided
+- [ ] **Structure:** Logical organization and flow
+- [ ] **Formatting:** Consistent markdown formatting
+- [ ] **Links:** All links work and point to correct resources
+- [ ] **Code:** All code examples are tested and work
+- [ ] **Grammar:** No spelling or grammar errors
+- [ ] **Audience:** Appropriate for target audience
+
+## Tools and Automation
+
+### Recommended Tools
+
+- **Markdown Linting:** markdownlint
+- **Link Checking:** markdown-link-check
+- **Spell Checking:** cspell
+- **Diagram Generation:** Mermaid, PlantUML
+- **API Docs:** Swagger/OpenAPI, JSDoc
+
+### Automation
+
+```yaml
+# .github/workflows/docs.yml
+name: Documentation
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint Markdown
+        uses: articulate/actions-markdownlint@v1
+      - name: Check Links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+      - name: Spell Check
+        uses: streetsidesoftware/cspell-action@v2
+```
+
+## Best Practices
+
+### Do's ✅
+
+- Write documentation as you code
+- Use concrete examples
+- Keep documentation close to code
+- Update docs in the same PR as code changes
+- Use diagrams for complex concepts
+- Provide troubleshooting guides
+- Include "why" not just "how"
+
+### Don'ts ❌
+
+- Don't assume prior knowledge
+- Don't use jargon without explanation
+- Don't write documentation after the fact
+- Don't duplicate information (use links)
+- Don't neglect maintenance
+- Don't skip examples
+- Don't write for yourself only
+
+---
+
+**Last Updated:** 2025-10-27  
+**Version:** 1.0.0  
+**Maintained By:** AI Research Team  
+**Review Cycle:** Quarterly
